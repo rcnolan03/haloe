@@ -1,13 +1,12 @@
-// app/settings/index.tsx
+// app/notifications/index.tsx
 
 import React from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 
-const SettingsScreen: React.FC = () => {
+const NotificationsScreen: React.FC = () => {
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Settings Test</Text>
-      {/* Add more settings components here */}
+      <Text style={styles.title}>Notifications Screen</Text>
     </View>
   );
 };
@@ -15,14 +14,14 @@ const SettingsScreen: React.FC = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    padding: 20,
+    justifyContent: 'center',
+    alignItems: 'center',
     backgroundColor: '#fff',
   },
   title: {
     fontSize: 24,
     fontWeight: 'bold',
-    marginBottom: 20,
   },
 });
 
-export default SettingsScreen;
+export default NotificationsScreen;
