@@ -6,6 +6,7 @@ import DatePickerScreen from './DatePickerScreen';
 import ProgressBar from './ProgressBar';
 import Summary from './Summary';
 import { styles } from './App.styles'; // External style sheet
+import HomeScreen from '../auth';
 
 // empty array for single select error:
 let emptyArr: string[] = []; 
@@ -44,7 +45,9 @@ function App() {
           )}
         </>
       ) : (
-        <Summary answers={answers} />
+        // routes you to the login screen
+       <HomeScreen/>
+
       )}
     </View>
   );
