@@ -14,6 +14,7 @@ const RegisterScreen: React.FC = () => {
     console.log('Registering with:', email, password);
     // Redirect to login after registration
     router.push('/auth/login');
+
   };
 
   return (

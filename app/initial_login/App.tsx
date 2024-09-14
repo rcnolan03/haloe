@@ -11,16 +11,52 @@ import HomeScreen from '../auth';
 // empty array for single select error:
 let emptyArr: string[] = []; 
 const questions = [
-  { type: 'text', question: "What is your name?" },
-  { type: 'single-select', question: "Select your gender:", options: ["Male", "Female", "Other"] },
-  { type: 'date', question: "What is your birthdate?" },
+  { key: 'name', type: 'text', question: "What is your name?" },
+  { key: 'gender', type: 'single-select', question: "Select your gender:", options: ["Male", "Female", "Other"] },
+  { key: 'birthdate', type: 'date', question: "What is your birthdate?" },
 ];
+
+
+// Function to save data
+async function saveData(key: string, value: string): Promise<void> {
+  try {
+    await SecureStore.setItemAsync(key, value);
+    console.log('Data saved successfully!');
+  } catch (error) {
+    console.error('Error saving data:', error);
+  }
+}
+
+// Function to retrieve data
+async function getData(key: string): Promise<string | null> {
+  try {
+    const value = await SecureStore.getItemAsync(key);
+    if (value) {
+      console.log('Retrieved value:', value);
+      return value;
+    } else {
+      console.log('No data found for the key:', key);
+      return null;
+    }
+  } catch (error) {
+    console.error('Error retrieving data:', error);
+    return null;
+  }
+}
 
 function App() {
   const [currentQuestion, setCurrentQuestion] = useState<number>(0);
   const [answers, setAnswers] = useState<{ [key: string]: string }>({});
 
-  const handleNext = (answer: string) => {
+  const handleNext = async (answer: string) => {
+
+    const questionKey = questions[currentQuestion].key;
+    await saveData(questionKey, answer);
+
+    const retrievedValue = await getData(questionKey);
+
+    console.log("Saved User Data: " + retrievedValue);
+
     setAnswers({ ...answers, [currentQuestion]: answer });
     setCurrentQuestion(currentQuestion + 1);
   };
