@@ -12,8 +12,8 @@ const RegisterScreen: React.FC = () => {
   const handleRegister = () => {
     // Perform registration logic here
     console.log('Registering with:', email, password);
-    // Redirect to login after registration
-    router.push('/auth/login');
+    // Redirect to initial login questionare after registration
+    router.push('../../initial_login/App');
 
   };
 
@@ -46,12 +46,13 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     padding: 16,
-    backgroundColor: '#f5f5f5',
+    backgroundColor: '#2c2c2c',
   },
   title: {
     fontSize: 24,
     marginBottom: 24,
     textAlign: 'center',
+    color: '#ccc'
   },
   input: {
     height: 40,

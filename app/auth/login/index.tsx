@@ -13,8 +13,8 @@ const LoginScreen: React.FC = () => {
     // Perform login logic here
     console.log('Logging in with:', email, password);
     // Redirect to home screen after login
-    router.push('../../initial_login/App');
-    //router.push('/home')
+    //router.push('../../initial_login/App');
+    router.push('/home')
   };
 
   return (
@@ -53,12 +53,13 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     padding: 16,
-    backgroundColor: '#f5f5f5',
+    backgroundColor: '#2c2c2c',
   },
   title: {
     fontSize: 24,
     marginBottom: 24,
     textAlign: 'center',
+    color: '#ccc'
   },
   input: {
     height: 40,

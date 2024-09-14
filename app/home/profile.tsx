@@ -1,8 +1,15 @@
 import React, { useState } from 'react';
 import { View, Text, Image, TouchableOpacity, StyleSheet } from 'react-native';
-
+import questions from '../initial_login/App';
 const SettingsPage = () => {
-  // Use strings for the options
+  // Example user data
+  const [userInfo] = useState({
+    name: questions["name"],
+    gender: 'Male',
+    birthday: '01/01/1990',
+  });
+
+
   const [selectedOptions, setSelectedOptions] = useState<string[]>([]);
 
   const toggleSelect = (option: string) => {
@@ -13,14 +20,9 @@ const SettingsPage = () => {
     }
   };
 
-  // determines which box is selected
   const isSelected = (option: string) => selectedOptions.includes(option);
 
-  const options = [
-    "Tell me a joke", 
-    "Play soothing sounds", 
-    "Tell me a fun fact"
-  ]; // String options
+  const options = ["Option A", "Option B", "Option C"]; // String options
 
   return (
     <View style={styles.container}>
@@ -35,7 +37,7 @@ const SettingsPage = () => {
 
       {/* Settings box */}
       <View style={styles.settingsBox}>
-        <Text style={styles.settingsText}>When I tap Lo, I want them to:</Text>
+        <Text style={styles.settingsText}>Settings Options</Text>
 
         {/* Multi-select boxes */}
         {options.map((option) => (
@@ -51,6 +53,14 @@ const SettingsPage = () => {
           </TouchableOpacity>
         ))}
       </View>
+
+      {/* User Info box */}
+      <Text style={styles.userInfoTitle}>User Info</Text>
+      <View style={styles.userInfoBox}>
+        <Text style={styles.userInfoText}>Name: {userInfo.name}</Text>
+        <Text style={styles.userInfoText}>Gender: {userInfo.gender}</Text>
+        <Text style={styles.userInfoText}>Birthday: {userInfo.birthday}</Text>
+      </View>
     </View>
   );
 };
@@ -59,24 +69,24 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#2c2c2c', // Dark gray background
-    padding: 40,
+    padding: 20,
   },
   profileContainer: {
     flexDirection: 'row',
     alignItems: 'center',
-    marginBottom: 35,
-    marginTop: 45
+    marginBottom: 20,
+    marginTop: 55,
+    marginLeft: 10
   },
   profileImage: {
-    width: 80,
-    height: 80,
-    borderRadius: 35,
+    width: 70,
+    height: 70,
+    borderRadius: 30,
     marginRight: 15,
   },
   username: {
     color: '#f5c300', // Yellow text
-    fontSize: 30,
-    marginLeft: 10,
+    fontSize: 20,
     fontWeight: 'bold',
   },
   loSettingsText: {
@@ -98,13 +108,14 @@ const styles = StyleSheet.create({
   settingsText: {
     color: '#fff', // White text
     fontSize: 14,
-    fontWeight: 'bold',
     marginBottom: 15,
   },
   optionBox: {
     padding: 15,
     borderRadius: 10,
     marginBottom: 10,
+    borderColor: '#f5c300', // Yellow stroke when unselected
+    borderWidth: 2,
     justifyContent: 'center',
     alignItems: 'center',
   },
@@ -113,14 +124,34 @@ const styles = StyleSheet.create({
     borderWidth: 2,
   },
   optionBoxSelected: {
-    borderColor: '#f5c300',
-    borderWidth: 2,
     backgroundColor: '#f5c300', // Yellow fill when selected
   },
   optionText: {
-    color: '#fff', // Black text
-    fontSize: 14,
-    fontWeight: 'normal',
+    color: '#ccc', // Black text
+    fontSize: 16,
+    fontWeight: 'bold',
+  },
+  userInfoBox: {
+    backgroundColor: '#3d3d3d', // Lighter gray background
+    borderRadius: 10,
+    padding: 15,
+    marginTop: 10,
+    shadowColor: '#000', // Drop shadow
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.8,
+    shadowRadius: 2,
+    elevation: 5,
+  },
+  userInfoTitle: {
+    fontSize: 18,
+    fontWeight: 'bold',
+    color: '#f5c300', // Yellow text
+    marginTop: 20,
+  },
+  userInfoText: {
+    color: '#fff', // White text
+    fontSize: 16,
+    marginBottom: 5,
   },
 });
 
