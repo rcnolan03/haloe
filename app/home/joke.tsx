@@ -1,0 +1,97 @@
+import React, { useState } from 'react';
+import { View, Text, Button, StyleSheet } from 'react-native';
+import * as Speech from 'expo-speech';
+import axios from 'axios';
+import OpenAI from 'openai';
+
+const AiWithTTS: React.FC = () => {
+  // Store the prompt
+  const [prompt] = useState("tell me a joke");
+  const openai = new OpenAI({
+    apiKey: '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',
+  });
+
+  // Store AI response
+  const [aiResponse, setAiResponse] = useState("");
+
+  const sendPromptToAI = async () => {
+    try {
+    //   // Send a request to an AI API (this is a placeholder for the actual API integration)
+    //   const response = await axios.post('https://api.openai.com/v1/chat/completions', {
+    //     model: 'gpt-3.5-turbo',
+    //     prompt: prompt,
+    //     max_tokens: 50,
+    //   }, {
+    //     headers: {
+    //       'Authorization': `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`
+    //     }
+    //   });
+      
+    const response = await openai.chat.completions.create({
+        model: "gpt-3.5-turbo",
+        messages: [
+          {
+            "role": "system",
+            "content": [
+              {
+                "type": "text",
+                "text": prompt
+              }
+            ]
+          }
+        ],
+        temperature: 1,
+        max_tokens: 2048,
+        top_p: 1,
+        frequency_penalty: 0,
+        presence_penalty: 0,
+        response_format: {
+          "type": "text"
+        },
+      });     
+      
+      // Extract the generated response from the API (adjust according to your API's response structure)
+      console.log(response.choices[0].message.content);
+      const generatedText = response.choices[0].message.content;
+
+      // Store the response in state
+      setAiResponse(generatedText!);
+
+      // Output the response using text-to-speech
+      Speech.speak(generatedText!);
+    } catch (error) {
+      console.error("Error generating AI response:", error);
+    }
+  };
+
+  return (
+    <View style={styles.container}>
+      <Text style={styles.promptText}>Prompt: {prompt}</Text>
+      <Button title="Generate AI Response and Speak" onPress={sendPromptToAI} />
+      {aiResponse ? (
+        <Text style={styles.aiResponseText}>AI Response: {aiResponse}</Text>
+      ) : null}
+    </View>
+  );
+};
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: '#2c2c2c', // Dark gray background
+  },
+  promptText: {
+    color: '#f5c300', // Yellow text
+    fontSize: 18,
+    marginBottom: 20,
+  },
+  aiResponseText: {
+    color: '#fff', // White text
+    fontSize: 16,
+    marginTop: 20,
+  },
+});
+
+export default AiWithTTS;

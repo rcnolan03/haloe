@@ -1,13 +1,9 @@
 import React, { useState } from 'react';
 import { View, Text, Image, TouchableOpacity, StyleSheet } from 'react-native';
-import questions from '../initial_login/App';
+import SecureStore from 'expo-secure-store';
+
 const SettingsPage = () => {
   // Example user data
-  const [userInfo] = useState({
-    name: questions["name"],
-    gender: 'Male',
-    birthday: '01/01/1990',
-  });
 
 
   const [selectedOptions, setSelectedOptions] = useState<string[]>([]);
@@ -57,9 +53,9 @@ const SettingsPage = () => {
       {/* User Info box */}
       <Text style={styles.userInfoTitle}>User Info</Text>
       <View style={styles.userInfoBox}>
-        <Text style={styles.userInfoText}>Name: {userInfo.name}</Text>
-        <Text style={styles.userInfoText}>Gender: {userInfo.gender}</Text>
-        <Text style={styles.userInfoText}>Birthday: {userInfo.birthday}</Text>
+        {/* <Text style={styles.userInfoText}>Name: {SecureStore.getItem("name")}</Text> */}
+        {/* <Text style={styles.userInfoText}>Gender: {SecureStore.getItem("gender")}</Text> */}
+        {/* <Text style={styles.userInfoText}>Birthday: {SecureStore.getItem("birthdate")}</Text> */}
       </View>
     </View>
   );

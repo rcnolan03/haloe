@@ -7,8 +7,8 @@ import SingleSelectScreen from './SingleSelectScreen';
 import DatePickerScreen from './DatePickerScreen';
 import ProgressBar from './ProgressBar';
 import { styles } from './App.styles'; // External style sheet
-import HomeScreen from '../auth';
 import SecureStore from 'expo-secure-store';
+import { useRouter } from 'expo-router';
 
 let emptyArr: string[] = []; 
 const questions = [
