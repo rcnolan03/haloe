@@ -13,8 +13,8 @@ const LoginScreen: React.FC = () => {
     // Perform login logic here
     console.log('Logging in with:', email, password);
     // Redirect to home screen after login
-    //router.push('../../initial_login/App');
-    router.push('/home')
+    router.push('../../initial_login/App');
+    //router.push('/home')
   };
 
   return (
