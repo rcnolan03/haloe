@@ -1,22 +1,22 @@
+// src/screens/AppScreen.tsx
+
 import React, { useState } from 'react';
-import { View, Button, Text } from 'react-native';
+import { View, Button } from 'react-native';
 import QuestionScreen from './QuestionScreen';
 import SingleSelectScreen from './SingleSelectScreen';
 import DatePickerScreen from './DatePickerScreen';
 import ProgressBar from './ProgressBar';
-import Summary from './Summary';
 import { styles } from './App.styles'; // External style sheet
-import HomeScreen from '../auth';
+import { useNavigation } from '@react-navigation/native';
 import SecureStore from 'expo-secure-store';
+import { useRouter } from 'expo-router';
 
-// empty array for single select error:
 let emptyArr: string[] = []; 
 const questions = [
   { key: 'name', type: 'text', question: "What is your name?" },
   { key: 'gender', type: 'single-select', question: "Select your gender:", options: ["Male", "Female", "Other"] },
   { key: 'birthdate', type: 'date', question: "What is your birthdate?" },
 ];
-
 
 // Function to save data
 async function saveData(key: string, value: string): Promise<void> {
@@ -45,21 +45,23 @@ async function getData(key: string): Promise<string | null> {
   }
 }
 
-function App() {
+function AppScreen() {
+    const router = useRouter(); // Get the router instance
   const [currentQuestion, setCurrentQuestion] = useState<number>(0);
   const [answers, setAnswers] = useState<{ [key: string]: string }>({});
 
   const handleNext = async (answer: string) => {
-
     const questionKey = questions[currentQuestion].key;
     await saveData(questionKey, answer);
-
     const retrievedValue = await getData(questionKey);
-
     console.log("Saved User Data: " + retrievedValue);
 
     setAnswers({ ...answers, [currentQuestion]: answer });
     setCurrentQuestion(currentQuestion + 1);
+  };
+
+  const navigateToHome = () => {
+    router.push('/home');
   };
 
   return (
@@ -78,16 +80,14 @@ function App() {
             />
           )}
           {questions[currentQuestion].type === 'date' && (
-            <DatePickerScreen question={questions[currentQuestion].question} onNext={handleNext} />
+            <DatePickerScreen question={questions[currentQuestion].question} onNext={navigateToHome} />
           )}
         </>
       ) : (
-        // routes you to the login screen
-       <HomeScreen/>
-
+        <Button title="Go to Home" onPress={navigateToHome} />  // Button to navigate to HomeScreen
       )}
     </View>
   );
 }
 
-export default App;
+export default AppScreen;
