@@ -39,12 +39,41 @@ const SettingsPage = () => {
     }
   };
 
-  const toggleSelect = (option: string) => {
-    if (selectedOptions.includes(option)) {
-      setSelectedOptions(selectedOptions.filter(selected => selected !== option));
-    } else {
-      setSelectedOptions([...selectedOptions, option]);
+
+
+  // Function to save data
+  async function saveData(key: string, value: string): Promise<void> {
+    try {
+      await SecureStore.setItemAsync(key, value);
+      console.log('Data saved successfully!');
+    } catch (error) {
+      console.error('Error saving data:', error);
     }
+  }
+
+
+  const toggleSelect = async (option: string) => { 
+    
+    let curArray;
+
+    if (selectedOptions.includes(option)) {
+      curArray = selectedOptions.filter(selected => selected !== option);
+      setSelectedOptions(curArray)
+      //setSelectedOptions(selectedOptions.filter(selected => selected !== option));
+    } else {
+      curArray = [...selectedOptions, option];
+      setSelectedOptions(curArray);
+      //setSelectedOptions([...selectedOptions, option]);
+    }
+
+
+    const stringifiedOptions = JSON.stringify(curArray);
+
+    console.log('Selected Options as JSON string:', stringifiedOptions);
+
+    await saveData('PrompList', stringifiedOptions);
+
+
   };
 
   const isSelected = (option: string) => selectedOptions.includes(option);
@@ -52,22 +81,9 @@ const SettingsPage = () => {
   const options = ["Option A", "Option B", "Option C"]; // String options
 
 
+  // store array as string OptA;OptB;OptC;
+  // Find part of array and take it out if its not selected
 
-  async function getName(): Promise<string | null> {
-    try {
-      const value = await SecureStore.getItemAsync('name');
-      if (value) {
-        console.log('Retrieved value:', value);
-        return value;
-      } else {
-        console.log('No data found for the key:', "name");
-        return null;
-      }
-    } catch (error) {
-      console.error('Error retrieving data:', error);
-      return null;
-    }
-  }
 
 
 
