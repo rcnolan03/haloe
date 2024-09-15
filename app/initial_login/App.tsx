@@ -80,7 +80,7 @@ function AppScreen() {
             />
           )}
           {questions[currentQuestion].type === 'date' && (
-            <DatePickerScreen question={questions[currentQuestion].question} onNext={navigateToHome} />
+            <DatePickerScreen question={questions[currentQuestion].question} onNext={handleNext} />
           )}
         </>
       ) : (
