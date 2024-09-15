@@ -1,7 +1,8 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { View, Text, Button, StyleSheet, TouchableOpacity, Image } from 'react-native';
 import * as Speech from 'expo-speech'; 
 import OpenAI from 'openai';
+import * as SecureStore from 'expo-secure-store';
 
 const AiWithTTS: React.FC = () => {
   // Store the prompt
@@ -13,11 +14,59 @@ const AiWithTTS: React.FC = () => {
   // Store AI response
   const [aiResponse, setAiResponse] = useState("");
 
+
+
+// Function to retrieve data
+async function getData(key: string): Promise<string | null> {
+  try {
+    const value = await SecureStore.getItemAsync(key);
+    if (value) {
+      console.log('Retrieved value:', value);
+      return value;
+    } else {
+      console.log('No data found for the key:', key);
+      return null;
+    }
+  } catch (error) {
+    console.error('Error retrieving data:', error);
+    return null;
+  }
+}
+
+
+
   const sendPromptToAI = async () => {
 
-    try {
+    try { 
+      //   // Send a request to an AI API (this is a placeholder for the actual API integration)
+      //   const response = await axios.post('https://api.openai.com/v1/chat/completions', {
+      //     model: 'gpt-3.5-turbo',
+      //     prompt: prompt,
+      //     max_tokens: 50,
+      //   }, {
+      //     headers: {
+      //       'Authorization': `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`
+      //     }
+      //   });
+
+
+
+      // get string from data
+      // destringify it
+      // at random, chose a value
+      // that value is the prompt
+
+      const prompsStr = await getData('PrompList');
+
+      if (prompsStr) {
+        const promptArr = JSON.parse(prompsStr);
+
+        const randomPrompt = promptArr[Math.floor(Math.random() * promptArr.length)];
+
+        console.log('Randomly selected prompt:', randomPrompt);
+
         
-      const response = await openai.chat.completions.create({
+        const response = await openai.chat.completions.create({
           model: "gpt-3.5-turbo",
           messages: [
             {
@@ -25,7 +74,7 @@ const AiWithTTS: React.FC = () => {
               "content": [
                 {
                   "type": "text",
-                  "text": prompt
+                  "text": randomPrompt
                 }
               ]
             }
@@ -49,10 +98,22 @@ const AiWithTTS: React.FC = () => {
 
         // Output the response using text-to-speech
         Speech.speak(generatedText!);
+
+
+
+      }
+
+
+      
+       
+
     } catch (error) {
       console.error("Error generating AI response:", error);
     }
   };
+
+
+
 
   return (
     <View style={styles.container}>
