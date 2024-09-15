@@ -297,6 +297,8 @@ const styles = StyleSheet.create({
     width: 120,
     height: 60,
     borderRadius: 40,
+    marginBottom: 20,
+    marginLeft: 22
   },
 });
 
