@@ -76,7 +76,7 @@ const SettingsPage = () => {
       {/* Profile section */}
       <View style={styles.profileContainer}>
         <Image source={require('./resources/profile.png')} style={styles.profileImage} />
-        <Text style={styles.username}>Username</Text>
+        <Text style={styles.username}>{name}</Text>
       </View>
 
       {/* LoSettings section */}
@@ -84,7 +84,7 @@ const SettingsPage = () => {
 
       {/* Settings box */}
       <View style={styles.settingsBox}>
-        <Text style={styles.settingsText}>Settings Options</Text>
+        <Text style={styles.settingsText}>When I press Loe, I want it to:</Text>
 
         {/* Multi-select boxes */}
         {options.map((option) => (
@@ -116,12 +116,12 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#2c2c2c', // Dark gray background
-    padding: 20,
+    padding: 30,
   },
   profileContainer: {
     flexDirection: 'row',
     alignItems: 'center',
-    marginBottom: 20,
+    marginBottom: 25,
     marginTop: 55,
     marginLeft: 10
   },
@@ -133,7 +133,7 @@ const styles = StyleSheet.create({
   },
   username: {
     color: '#f5c300', // Yellow text
-    fontSize: 20,
+    fontSize: 24,
     fontWeight: 'bold',
   },
   loSettingsText: {
@@ -141,6 +141,7 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     color: '#f5c300', // Yellow text
     marginBottom: 10,
+    marginLeft: 8
   },
   settingsBox: {
     backgroundColor: '#3d3d3d', // Lighter gray background
@@ -194,6 +195,7 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     color: '#f5c300', // Yellow text
     marginTop: 20,
+    marginLeft: 8
   },
   userInfoText: {
     color: '#fff', // White text
