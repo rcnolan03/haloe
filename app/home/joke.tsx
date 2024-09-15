@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, Text, Button, StyleSheet, TouchableOpacity } from 'react-native';
+import { View, Text, Button, StyleSheet, TouchableOpacity, Image } from 'react-native';
 import * as Speech from 'expo-speech'; 
 import OpenAI from 'openai';
 
@@ -14,50 +14,51 @@ const AiWithTTS: React.FC = () => {
   const [aiResponse, setAiResponse] = useState("");
 
   const sendPromptToAI = async () => {
+
     try {
-    //   // Send a request to an AI API (this is a placeholder for the actual API integration)
-    //   const response = await axios.post('https://api.openai.com/v1/chat/completions', {
-    //     model: 'gpt-3.5-turbo',
-    //     prompt: prompt,
-    //     max_tokens: 50,
-    //   }, {
-    //     headers: {
-    //       'Authorization': `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`
-    //     }
-    //   });
-      
-    const response = await openai.chat.completions.create({
-        model: "gpt-3.5-turbo",
-        messages: [
-          {
-            "role": "system",
-            "content": [
-              {
-                "type": "text",
-                "text": prompt
-              }
-            ]
-          }
-        ],
-        temperature: 1,
-        max_tokens: 2048,
-        top_p: 1,
-        frequency_penalty: 0,
-        presence_penalty: 0,
-        response_format: {
-          "type": "text"
-        },
-      });     
-      
-      // Extract the generated response from the API (adjust according to your API's response structure)
-      console.log(response.choices[0].message.content);
-      const generatedText = response.choices[0].message.content;
+      //   // Send a request to an AI API (this is a placeholder for the actual API integration)
+      //   const response = await axios.post('https://api.openai.com/v1/chat/completions', {
+      //     model: 'gpt-3.5-turbo',
+      //     prompt: prompt,
+      //     max_tokens: 50,
+      //   }, {
+      //     headers: {
+      //       'Authorization': `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`
+      //     }
+      //   });
+        
+      const response = await openai.chat.completions.create({
+          model: "gpt-3.5-turbo",
+          messages: [
+            {
+              "role": "system",
+              "content": [
+                {
+                  "type": "text",
+                  "text": prompt
+                }
+              ]
+            }
+          ],
+          temperature: 1,
+          max_tokens: 2048,
+          top_p: 1,
+          frequency_penalty: 0,
+          presence_penalty: 0,
+          response_format: {
+            "type": "text"
+          },
+        });     
+        
+        // Extract the generated response from the API (adjust according to your API's response structure)
+        console.log(response.choices[0].message.content);
+        const generatedText = response.choices[0].message.content;
 
-      // Store the response in state
-      setAiResponse(generatedText!);
+        // Store the response in state
+        setAiResponse(generatedText!);
 
-      // Output the response using text-to-speech
-      Speech.speak(generatedText!);
+        // Output the response using text-to-speech
+        Speech.speak(generatedText!);
     } catch (error) {
       console.error("Error generating AI response:", error);
     }
@@ -75,8 +76,9 @@ const AiWithTTS: React.FC = () => {
       <TouchableOpacity onPress={sendPromptToAI}  style={styles.imageButton}>
         <Image
           source={require('./resources/profile.png')} // Replace with your image URL
-          style={styles.image}
+          style={styles.imageButton}
         />
+
       </TouchableOpacity>
       {aiResponse ? (
         <Text style={styles.aiResponseText}>AI Response: {aiResponse}</Text>
