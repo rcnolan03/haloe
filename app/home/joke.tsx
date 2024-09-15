@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
-import { View, Text, Button, StyleSheet } from 'react-native';
-import * as Speech from 'expo-speech';
-import axios from 'axios';
+import { View, Text, Button, StyleSheet, TouchableOpacity } from 'react-native';
+import * as Speech from 'expo-speech'; 
 import OpenAI from 'openai';
 
 const AiWithTTS: React.FC = () => {
@@ -65,9 +64,20 @@ const AiWithTTS: React.FC = () => {
   };
 
   return (
+    // <View style={styles.container}>
+    //   <Text style={styles.promptText}>Prompt: {prompt}</Text>
+    //   <Button title="Generate AI Response and Speak" onPress={sendPromptToAI} />
+    //   {aiResponse ? (
+    //     <Text style={styles.aiResponseText}>AI Response: {aiResponse}</Text>
+    //   ) : null}
+    // </View>
     <View style={styles.container}>
-      <Text style={styles.promptText}>Prompt: {prompt}</Text>
-      <Button title="Generate AI Response and Speak" onPress={sendPromptToAI} />
+      <TouchableOpacity onPress={sendPromptToAI}  style={styles.imageButton}>
+        <Image
+          source={require('./resources/profile.png')} // Replace with your image URL
+          style={styles.image}
+        />
+      </TouchableOpacity>
       {aiResponse ? (
         <Text style={styles.aiResponseText}>AI Response: {aiResponse}</Text>
       ) : null}
@@ -92,6 +102,11 @@ const styles = StyleSheet.create({
     fontSize: 16,
     marginTop: 20,
   },
+  imageButton: {
+    // Style your button container if necessary
+  },
 });
+
+
 
 export default AiWithTTS;
