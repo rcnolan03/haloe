@@ -15,6 +15,7 @@ const HomeScreen: React.FC = () => {
   const [destination, setDestination] = useState<Coordinate | null>(null); // Store selected destination
   const [loading, setLoading] = useState(true);
   const [isDestinationSelected, setIsDestinationSelected] = useState(false); // Track if a destination is selected
+  const [isNavigating, setIsNavigating] = useState(false); // State to track navigation status
 
   useEffect(() => {
     requestLocationPermission();
@@ -29,9 +30,7 @@ const HomeScreen: React.FC = () => {
     }
 
     // Get the current location of the user
-    //const location = await Location.getCurrentPositionAsync({});
-    //const { latitude, longitude } = location.coords;
-    setCurrentLocation({ latitude: 41.791896, longitude: -87.603115 });
+    setCurrentLocation({ latitude: 41.791896, longitude: -87.603115 }); // Example coordinates
     setLoading(false);
   };
 
@@ -66,17 +65,32 @@ const HomeScreen: React.FC = () => {
 
         const data = await response.json();
 
-      // Convert array of arrays to array of objects
-      const formattedData = data.map((coord: number[]) => ({
-        latitude: coord[0],
-        longitude: coord[1],
-      }));
+        // Convert array of arrays to array of objects
+        const formattedData = data.map((coord: number[]) => ({
+          latitude: coord[0],
+          longitude: coord[1],
+        }));
 
-      console.log(formattedData);
-      setRouteCoordinates(formattedData); // Set state with formatted data
+        console.log(formattedData);
+        setRouteCoordinates(formattedData); // Set state with formatted data
+
+        // Toggle navigation state
+        setIsNavigating(true);
       } catch (error) {
         console.error('Error sending locations to backend:', error);
       }
+    }
+  };
+
+  const handleNavigationToggle = () => {
+    if (isNavigating) {
+      // End navigation
+      setIsNavigating(false);
+      setIsDestinationSelected(false); // Reset destination selection
+      setRouteCoordinates([]); // Clear the route coordinates to remove the polyline
+    } else {
+      // Start navigation
+      sendLocationsToBackend();
     }
   };
 
@@ -90,56 +104,58 @@ const HomeScreen: React.FC = () => {
 
   return (
     <View style={styles.container}>
-      {/* Google Places Autocomplete Search Bar */}
-      <GooglePlacesAutocomplete
-        placeholder="Search"
-        minLength={2} // Minimum length of input before search starts
-        fetchDetails={true}
-        onPress={(data, details = null) => {
-          if (details) {
-            const { lat, lng } = details.geometry.location;
-            setDestination({ latitude: lat, longitude: lng }); // Set destination
-            setIsDestinationSelected(true); // Show the "Start Navigation" button
-          }
-        }}
-        query={{
-          key: 'AIzaSyCypHEZiYGK47Pxi-2pGNQwB3HbVNWwxkI', // Replace with your Google API Key
-          language: 'en',
-        }}
-        styles={{
-          container: {
-            position: 'absolute',
-            top: 50, // Adjust this value to move the search bar lower
-            left: 0,
-            right: 0,
-            alignItems: 'center', // Center the search bar horizontally
-            zIndex: 1,
-          },
-          textInputContainer: {
-            width: '90%', // Adjust width as needed
-            backgroundColor: 'white',
-            borderRadius: 10,
-            padding: 10,
-            shadowColor: '#000',
-            shadowOffset: { width: 0, height: 2 },
-            shadowOpacity: 0.25,
-            shadowRadius: 3.84,
-            elevation: 5, // Adds shadow on Android
-          },
-          textInput: {
-            height: 40,
-            color: '#5d5d5d',
-            fontSize: 16,
-          },
-          listView: {
-            backgroundColor: 'white',
-            borderRadius: 10,
-            marginTop: 5,
-            elevation: 5,
-          },
-        }}
-      />
-      
+      {/* Conditionally render Google Places Autocomplete Search Bar */}
+      {!isNavigating && (
+        <GooglePlacesAutocomplete
+          placeholder="Search"
+          minLength={2} // Minimum length of input before search starts
+          fetchDetails={true}
+          onPress={(data, details = null) => {
+            if (details) {
+              const { lat, lng } = details.geometry.location;
+              setDestination({ latitude: lat, longitude: lng }); // Set destination
+              setIsDestinationSelected(true); // Show the "Start Navigation" button
+            }
+          }}
+          query={{
+            key: 'AIzaSyCypHEZiYGK47Pxi-2pGNQwB3HbVNWwxkI', // Replace with your Google API Key
+            language: 'en',
+          }}
+          styles={{
+            container: {
+              position: 'absolute',
+              top: 50, // Adjust this value to move the search bar lower
+              left: 0,
+              right: 0,
+              alignItems: 'center', // Center the search bar horizontally
+              zIndex: 1,
+            },
+            textInputContainer: {
+              width: '90%', // Adjust width as needed
+              backgroundColor: 'white',
+              borderRadius: 10,
+              padding: 10,
+              shadowColor: '#000',
+              shadowOffset: { width: 0, height: 2 },
+              shadowOpacity: 0.25,
+              shadowRadius: 3.84,
+              elevation: 5, // Adds shadow on Android
+            },
+            textInput: {
+              height: 40,
+              color: '#5d5d5d',
+              fontSize: 16,
+            },
+            listView: {
+              backgroundColor: 'white',
+              borderRadius: 10,
+              marginTop: 5,
+              elevation: 5,
+            },
+          }}
+        />
+      )}
+
       {/* Map View */}
       <MapView
         provider={Platform.OS === 'android' ? PROVIDER_GOOGLE : undefined} // Use Google Maps on Android, default on iOS
@@ -176,7 +192,10 @@ const HomeScreen: React.FC = () => {
       {/* Show button only if a destination is selected */}
       {isDestinationSelected && (
         <View style={styles.buttonContainer}>
-          <Button title="Start Navigation" onPress={sendLocationsToBackend} />
+          <Button
+            title={isNavigating ? "End Navigation" : "Start Navigation"}
+            onPress={handleNavigationToggle}
+          />
         </View>
       )}
     </View>
