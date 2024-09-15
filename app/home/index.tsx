@@ -3,6 +3,7 @@ import { View, StyleSheet, Dimensions, Platform, ActivityIndicator, Button, Link
 import MapView, { PROVIDER_GOOGLE, Polyline, Marker } from 'react-native-maps';
 import * as Location from 'expo-location';
 import { GooglePlacesAutocomplete } from 'react-native-google-places-autocomplete';
+import * as SecureStore from 'expo-secure-store';
 
 import { Text, Image } from 'react-native';
 import * as Speech from 'expo-speech'; 
@@ -108,42 +109,73 @@ const HomeScreen: React.FC = () => {
   // Store AI response
   const [aiResponse, setAiResponse] = useState("");
 
+
+  // Function to retrieve data
+  async function getData(key: string): Promise<string | null> {
+    try {
+      const value = await SecureStore.getItemAsync(key);
+      if (value) {
+        console.log('Retrieved value:', value);
+        return value;
+      } else {
+        console.log('No data found for the key:', key);
+        return null;
+      }
+    } catch (error) {
+      console.error('Error retrieving data:', error);
+      return null;
+    }
+  }
+    
+
   const sendPromptToAI = async () => {
 
     try {
         
-      const response = await openai.chat.completions.create({
-          model: "gpt-3.5-turbo",
-          messages: [
-            {
-              "role": "system",
-              "content": [
-                {
-                  "type": "text",
-                  "text": prompt
-                }
-              ]
-            }
-          ],
-          temperature: 1,
-          max_tokens: 2048,
-          top_p: 1,
-          frequency_penalty: 0,
-          presence_penalty: 0,
-          response_format: {
-            "type": "text"
-          },
-        });     
-        
-        // Extract the generated response from the API (adjust according to your API's response structure)
-        console.log(response.choices[0].message.content);
-        const generatedText = response.choices[0].message.content;
 
-        // Store the response in state
-        setAiResponse(generatedText!);
+      const prompsStr = await getData('PrompList');
 
-        // Output the response using text-to-speech
-        Speech.speak(generatedText!);
+      if (prompsStr) {
+        const promptArr = JSON.parse(prompsStr);
+
+        const randomPrompt = promptArr[Math.floor(Math.random() * promptArr.length)];
+
+        console.log('Randomly selected prompt:', randomPrompt);
+
+
+        const response = await openai.chat.completions.create({
+            model: "gpt-3.5-turbo",
+            messages: [
+              {
+                "role": "system",
+                "content": [
+                  {
+                    "type": "text",
+                    "text": randomPrompt
+                  }
+                ]
+              }
+            ],
+            temperature: 1,
+            max_tokens: 2048,
+            top_p: 1,
+            frequency_penalty: 0,
+            presence_penalty: 0,
+            response_format: {
+              "type": "text"
+            },
+          });     
+          
+          // Extract the generated response from the API (adjust according to your API's response structure)
+          console.log(response.choices[0].message.content);
+          const generatedText = response.choices[0].message.content;
+
+          // Store the response in state
+          setAiResponse(generatedText!);
+
+          // Output the response using text-to-speech
+          Speech.speak(generatedText!);
+      }
     } catch (error) {
       console.error("Error generating AI response:", error);
     }
