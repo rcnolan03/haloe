@@ -56,7 +56,7 @@ const HomeScreen: React.FC = () => {
   const sendLocationsToBackend = async () => {
     if (currentLocation && destination) {
       try {
-        const response = await fetch('http://172.29.247.206:3000/api/send-locations', { // Replace with your backend endpoint
+        const response = await fetch('http://172.29.176.135:3000/api/send-locations', { // Replace with your backend endpoint
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
@@ -68,6 +68,8 @@ const HomeScreen: React.FC = () => {
         });
 
         const data = await response.json();
+        console.log("This is my data: ", data);
+        
 
         // Convert array of arrays to array of objects
         const formattedData = data.map((coord: number[]) => ({
