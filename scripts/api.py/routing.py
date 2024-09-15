@@ -6,15 +6,46 @@ import csv
 
 from azure.core.credentials import AzureKeyCredential
 
+#inputs for weights and locations
+inputRisk = float(.999)
+inputDist = float(.001)
+
+#inputs for start and end locations
+#Union S and Navy P
+#startLo_input = (41.879297, -87.640300)
+#endLo_input = (41.891149, -87.606453)
+
+#uchi 
+startLo_input = (41.791896, -87.603115)
+
+#gheto wendys
+endLo_input = (41.794623, -87.632608)
+
+#MSI 
+#endLo_input = (41.792154, -87.585237)
+
+
 # Function to normalize values between 0 and 1
 def normalize(series):
     return (series - series.min()) / (series.max() - series.min())
 
 # Function to normalize and assign risk scores
 def normalize_risk(crime_data):
-    # Assign risk scores based on crime severity or type if available
-    # For simplicity, assign a risk score of 1 to each incident
-    crime_data['risk_score'] = 1
+    # Define severity scores for each crime type
+    crime_severity = {
+        'HOMICIDE': 10,
+        'SEX OFFENSE': 10,
+        'KIDNAPPING': 10,
+        'ASSAULT': 7,
+        'ROBBERY': 7,
+        'BATTERY': 7,
+        'BURGLARY': 5,
+        'THEFT': 5
+    }
+
+    # Assign risk scores based on the crime type
+    crime_data['risk_score'] = crime_data['Primary Type'].map(crime_severity).fillna(1)
+    
     return crime_data
 
 # Function to get nearby crimes for a route segment
@@ -53,21 +84,9 @@ def calculate_route_distance(route):
 def route_segments(route):
     return route
 
-# Get user inputs for weights and locations
-inputRisk = float(input("Enter the risk weight (0 < n < 1): "))
-inputDist = float(input("Enter the distance weight (0 < n < 1): "))
-
-# Ensure the weights sum up to 1
-if not (0 < inputRisk < 1) or not (0 < inputDist < 1) or (round(inputRisk + inputDist, 5) != 1.0):
-    raise ValueError("inputRisk and inputDist must be between 0 and 1 and sum up to 1.")
-
-# Get user inputs for start and end locations
-startLo_input = input("Enter the start location (latitude,longitude): ")
-endLo_input = input("Enter the end location (latitude,longitude): ")
-
 # Convert input strings to coordinate tuples
-startLo = tuple(map(float, startLo_input.strip("() ").split(',')))
-endLo = tuple(map(float, endLo_input.strip("() ").split(',')))
+startLo = startLo_input
+endLo = endLo_input
 
 # Load crime data
 crime_data = pd.read_csv('Chi Crime Data.csv')
@@ -88,7 +107,7 @@ def get_possible_routes(startLo, endLo):
         'api-version': '1.0',
         'subscription-key': subscription_key,
         'query': f'{startLo[0]},{startLo[1]}:{endLo[0]},{endLo[1]}',
-        'maxAlternatives': 2,  # Get 3 routes: 1 primary and 2 alternatives
+        'maxAlternatives': 4,  # Get 3 routes: 1 primary and 2 alternatives
         'routeType': 'fastest',
         'travelMode': 'pedestrian',  # Use 'car' or 'pedestrian' as needed
         'computeTravelTimeFor': 'all',
@@ -128,6 +147,7 @@ def calculate_route_risk(route):
     return total_risk
 
 # Function to get the optimal route based on weights
+
 def get_optimal_route(possible_routes):
     route_risks = []
     route_distances = []
@@ -148,14 +168,14 @@ def get_optimal_route(possible_routes):
     for i in range(len(possible_routes)):
         composite_score = (inputRisk * normalized_risks[i]) + (inputDist * normalized_distances[i])
         route_scores.append({'route': possible_routes[i], 'score': composite_score})
-
     optimal_route = min(route_scores, key=lambda x: x['score'])
+    print("Normalized risk:", normalized_risks)
     return optimal_route
 
 # Get possible routes
 possible_routes = get_possible_routes(startLo, endLo)
 
-if not possible_routes:
+if not possible_routes: 
     print("No routes found.")
 else:
     # Find the optimal route
@@ -169,18 +189,13 @@ else:
     print(f"\nComposite Score: {optimal_route['score']}")
 
 # New method to flip coordinates and save to CSV
-def save_flipped_optimal_route(optimal_route):
-    flipped_optimal_route = [(lon, lat) for lat, lon in optimal_route['route']]  # Swap lat and lon
-
-    # Create a CSV file with headers for Geojson.io format
+def save_optimal_route(optimal_route):
     with open('optimal_route.csv', mode='w', newline='') as file:
         writer = csv.writer(file)
-        writer.writerow(['longitude', 'latitude'])  # CSV headers
-        writer.writerows(flipped_optimal_route)     # Write the flipped coordinates
+        writer.writerow(['latitude', 'longitude'])  # Write the header
+        writer.writerows(optimal_route['route'])    # Write the route coordinates
 
-    print("Flipped coordinates saved to 'optimal_route.csv'.")
-
-save_flipped_optimal_route(optimal_route)
+save_optimal_route(optimal_route)
 
 #if my python script returns a disctionary of latitudes and longitudes, how can I convert this to be usable for the node backend?
 
