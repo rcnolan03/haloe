@@ -16,16 +16,6 @@ const AiWithTTS: React.FC = () => {
   const sendPromptToAI = async () => {
 
     try {
-      //   // Send a request to an AI API (this is a placeholder for the actual API integration)
-      //   const response = await axios.post('https://api.openai.com/v1/chat/completions', {
-      //     model: 'gpt-3.5-turbo',
-      //     prompt: prompt,
-      //     max_tokens: 50,
-      //   }, {
-      //     headers: {
-      //       'Authorization': `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`
-      //     }
-      //   });
         
       const response = await openai.chat.completions.create({
           model: "gpt-3.5-turbo",
