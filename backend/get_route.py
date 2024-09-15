@@ -14,7 +14,21 @@ def normalize(series):
     return (series - series.min()) / (series.max() - series.min())
 
 def normalize_risk(crime_data):
-    crime_data['risk_score'] = 1
+    # Define severity scores for each crime type
+    crime_severity = {
+        'HOMICIDE': 10,
+        'SEX OFFENSE': 10,
+        'KIDNAPPING': 10,
+        'ASSAULT': 7,
+        'ROBBERY': 7,
+        'BATTERY': 7,
+        'BURGLARY': 5,
+        'THEFT': 5
+    }
+
+    # Assign risk scores based on the crime type
+    crime_data['risk_score'] = crime_data['Primary Type'].map(crime_severity).fillna(1)
+    
     return crime_data
 
 def get_nearby_crimes(segment, crime_data, radius=0.001):
