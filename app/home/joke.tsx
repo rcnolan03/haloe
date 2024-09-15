@@ -66,18 +66,7 @@ async function getData(key: string): Promise<string | null> {
         console.log('Randomly selected prompt:', randomPrompt);
 
         
-
-      }
-
-
-      
-      
-
-
-
-
-        
-      const response = await openai.chat.completions.create({
+        const response = await openai.chat.completions.create({
           model: "gpt-3.5-turbo",
           messages: [
             {
@@ -85,7 +74,7 @@ async function getData(key: string): Promise<string | null> {
               "content": [
                 {
                   "type": "text",
-                  "text": prompt
+                  "text": randomPrompt
                 }
               ]
             }
@@ -109,6 +98,15 @@ async function getData(key: string): Promise<string | null> {
 
         // Output the response using text-to-speech
         Speech.speak(generatedText!);
+
+
+
+      }
+
+
+      
+       
+
     } catch (error) {
       console.error("Error generating AI response:", error);
     }
@@ -118,24 +116,14 @@ async function getData(key: string): Promise<string | null> {
 
 
   return (
-    // <View style={styles.container}>
-    //   <Text style={styles.promptText}>Prompt: {prompt}</Text>
-    //   <Button title="Generate AI Response and Speak" onPress={sendPromptToAI} />
-    //   {aiResponse ? (
-    //     <Text style={styles.aiResponseText}>AI Response: {aiResponse}</Text>
-    //   ) : null}
-    // </View>
     <View style={styles.container}>
       <TouchableOpacity onPress={sendPromptToAI}  style={styles.imageButton}>
         <Image
-          source={require('./resources/profile.png')} // Replace with your image URL
+          source={require('./resources/Loe1.png')} // Replace with your image URL
           style={styles.imageButton}
         />
 
       </TouchableOpacity>
-      {aiResponse ? (
-        <Text style={styles.aiResponseText}>AI Response: {aiResponse}</Text>
-      ) : null}
     </View>
   );
 };
@@ -158,7 +146,9 @@ const styles = StyleSheet.create({
     marginTop: 20,
   },
   imageButton: {
-    // Style your button container if necessary
+    width: 120,
+    height: 60,
+    borderRadius: 40,
   },
 });
 

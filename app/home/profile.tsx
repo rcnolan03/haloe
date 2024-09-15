@@ -78,7 +78,7 @@ const SettingsPage = () => {
 
   const isSelected = (option: string) => selectedOptions.includes(option);
 
-  const options = ["Option A", "Option B", "Option C"]; // String options
+  const options = ["Tell me a joke", "Tell me a short story", "Give me some life advice"]; // String options
 
 
   // store array as string OptA;OptB;OptC;
