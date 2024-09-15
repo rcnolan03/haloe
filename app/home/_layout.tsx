@@ -14,7 +14,7 @@ export default function TabLayout() {
         tabBarStyle: {paddingBottom: 30, backgroundColor: '#3d3d3d'},
         tabBarActiveTintColor: Colors[colorScheme ?? 'dark'].tint,
         tabBarInactiveBackgroundColor: '#3d3d3d',
-        tabBarActiveBackgroundColor: '#f5c300',
+        tabBarActiveBackgroundColor: '#F9DC5C',
         headerShown: false,
       }}>
       <Tabs.Screen
@@ -30,15 +30,6 @@ export default function TabLayout() {
         name="profile"
         options={{
           title: 'Profile',
-          tabBarIcon: ({ color, focused }) => (
-            <TabBarIcon name={focused ? 'person' : 'person'} color={color} />
-          ),
-        }}
-      />
-      <Tabs.Screen
-        name="joke"
-        options={{
-          title: 'Joke',
           tabBarIcon: ({ color, focused }) => (
             <TabBarIcon name={focused ? 'person' : 'person'} color={color} />
           ),

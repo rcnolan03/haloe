@@ -34,8 +34,9 @@ const styles = {
     marginBottom: 20,
   },
   inputField: {
-    borderColor: 'gray',
-    borderWidth: 1,
+    borderColor: 'white',
+    borderRadius: 15,
+    borderWidth: 2,
     padding: 10,
     color: 'black',
     marginBottom: 20,

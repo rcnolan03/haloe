@@ -56,7 +56,7 @@ const HomeScreen: React.FC = () => {
   const sendLocationsToBackend = async () => {
     if (currentLocation && destination) {
       try {
-        const response = await fetch('http://172.29.247.206:3000/api/send-locations', { // Replace with your backend endpoint
+        const response = await fetch('http://172.29.195.118:3000/api/send-locations', { // Replace with your backend endpoint
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
@@ -160,7 +160,7 @@ const HomeScreen: React.FC = () => {
       {/* Conditionally render Google Places Autocomplete Search Bar */}
       {!isNavigating && (
         <GooglePlacesAutocomplete
-          placeholder="Search"
+          placeholder="Where you do want to go?"
           minLength={2} // Minimum length of input before search starts
           fetchDetails={true}
           onPress={(data, details = null) => {
@@ -177,7 +177,7 @@ const HomeScreen: React.FC = () => {
           styles={{
             container: {
               position: 'absolute',
-              top: 50, // Adjust this value to move the search bar lower
+              top: 70, // Adjust this value to move the search bar lower
               left: 0,
               right: 0,
               alignItems: 'center', // Center the search bar horizontally
@@ -188,7 +188,7 @@ const HomeScreen: React.FC = () => {
               backgroundColor: 'white',
               borderRadius: 10,
               padding: 10,
-              shadowColor: '#000',
+              shadowColor: 'black',
               shadowOffset: { width: 0, height: 2 },
               shadowOpacity: 0.25,
               shadowRadius: 3.84,
@@ -229,8 +229,8 @@ const HomeScreen: React.FC = () => {
         {routeCoordinates.length > 0 && (
           <Polyline
             coordinates={routeCoordinates} // Plot the route using formatted coordinates
-            strokeColor="#ff0000" // Customize the route color
-            strokeWidth={4} // Customize the route width
+            strokeColor="#F9DC5C" // Customize the route color
+            strokeWidth={5} // Customize the route width
           />
         )}
 
@@ -282,9 +282,9 @@ const styles = StyleSheet.create({
   buttonContainer: {
     position: 'absolute',
     bottom: 30,
-    left: '20%',
-    right: '20%',
-    backgroundColor: 'white',
+    left: '15%',
+    right: '15%',
+    backgroundColor: '#3d3d3d',
     borderRadius: 10,
     padding: 10,
     shadowColor: '#000',
@@ -298,7 +298,7 @@ const styles = StyleSheet.create({
     height: 60,
     borderRadius: 40,
     marginBottom: 20,
-    marginLeft: 22
+    marginLeft: 33
   },
 });
 

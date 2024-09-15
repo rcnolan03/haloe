@@ -15,7 +15,7 @@ const DatePickerScreen: React.FC<DatePickerScreenProps> = ({ question, onNext })
 
   return (
     <View style={{ padding: 20 }}>
-      <Text style={{ fontSize: 18, marginBottom: 20 }}>{question}</Text>
+      <Text style={{ fontSize: 18, marginBottom: 20, color: 'white' }}>{question}</Text>
       <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
         <TextInput
           placeholder="MM"
@@ -23,7 +23,7 @@ const DatePickerScreen: React.FC<DatePickerScreenProps> = ({ question, onNext })
           onChangeText={setMonth}
           keyboardType="numeric"
           maxLength={2}
-          style={{ borderBottomWidth: 1, borderBottomColor: '#ccc', width: 50, textAlign: 'center' }}
+          style={{ borderWidth: 1, borderColor: '#ccc', marginTop: 5, width: 50, height: 40, textAlign: 'center' }}
         />
         <TextInput
           placeholder="DD"
@@ -31,7 +31,7 @@ const DatePickerScreen: React.FC<DatePickerScreenProps> = ({ question, onNext })
           onChangeText={setDay}
           keyboardType="numeric"
           maxLength={2}
-          style={{ borderBottomWidth: 1, borderBottomColor: '#ccc', width: 50, textAlign: 'center' }}
+          style={{ borderWidth: 1, borderColor: '#ccc', width: 50, marginTop: 5, textAlign: 'center' }}
         />
         <TextInput
           placeholder="YYYY"
@@ -39,7 +39,7 @@ const DatePickerScreen: React.FC<DatePickerScreenProps> = ({ question, onNext })
           onChangeText={setYear}
           keyboardType="numeric"
           maxLength={4}
-          style={{ borderBottomWidth: 1, borderBottomColor: '#ccc', width: 80, textAlign: 'center' }}
+          style={{ borderWidth: 1, borderColor: '#ccc', width: 80, marginTop: 5, textAlign: 'center' }}
         />
       </View>
       <Button title="Next" onPress={() => isDateValid() && onNext(`${month}/${day}/${year}`)} disabled={!isDateValid()} />

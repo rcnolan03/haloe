@@ -16,7 +16,7 @@ const SingleSelectScreen: React.FC<SingleSelectScreenProps> = ({ question, optio
 
   return (
     <View style={{ padding: 20 }}>
-      <Text style={{ fontSize: 18, marginBottom: 20 }}>{question}</Text>
+      <Text style={{ fontSize: 18, marginBottom: 20, color: 'white'}}>{question}</Text>
       {options.map((option) => (
         <TouchableOpacity
           key={option}
@@ -29,7 +29,7 @@ const SingleSelectScreen: React.FC<SingleSelectScreenProps> = ({ question, optio
             marginBottom: 10,
           }}
         >
-          <Text>{option}</Text>
+          <Text style={{color:'white'}}>{option}</Text>
         </TouchableOpacity>
       ))}
       <Button title="Next" onPress={() => selectedOption && onNext(selectedOption)} disabled={!selectedOption} />

@@ -96,7 +96,7 @@ const SettingsPage = () => {
       </View>
 
       {/* LoSettings section */}
-      <Text style={styles.loSettingsText}>LoSettings</Text>
+      <Text style={styles.loSettingsText}>Loe Settings</Text>
 
       {/* Settings box */}
       <View style={styles.settingsBox}>
@@ -112,7 +112,9 @@ const SettingsPage = () => {
               isSelected(option) ? styles.optionBoxSelected : styles.optionBoxUnselected,
             ]}
           >
-            <Text style={styles.optionText}>{option}</Text>
+            <Text style={
+              [isSelected(option) ? styles.optionTextSelected : styles.optionText,]
+            }>{option}</Text>
           </TouchableOpacity>
         ))}
       </View>
@@ -178,20 +180,25 @@ const styles = StyleSheet.create({
     padding: 15,
     borderRadius: 10,
     marginBottom: 10,
-    borderColor: '#f5c300', // Yellow stroke when unselected
+    borderColor: '#F9DC5C', // Yellow stroke when unselected
     borderWidth: 2,
     justifyContent: 'center',
     alignItems: 'center',
   },
   optionBoxUnselected: {
-    borderColor: '#f5c300', // Yellow stroke when unselected
+    borderColor: '#F9DC5C', // Yellow stroke when unselected
     borderWidth: 2,
   },
   optionBoxSelected: {
-    backgroundColor: '#f5c300', // Yellow fill when selected
+    backgroundColor: '#F9DC5C', // Yellow fill when selected
+  },
+  optionTextSelected: {
+    color: '#3d3d3d', // light gray text when selected
+    fontSize: 16,
+    fontWeight: 'bold',
   },
   optionText: {
-    color: '#ccc', // Black text
+    color: 'white', // white text
     fontSize: 16,
     fontWeight: 'bold',
   },
