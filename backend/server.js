@@ -8,9 +8,18 @@ const PORT = 3000;
 app.use(cors());
 app.use(express.json()); // Middleware to parse JSON request bodies
 
+
+exec('py --version', (error, stdout, stderr) => {
+  if (error) {
+      console.error(`Error checking Python version: ${error.message}`);
+      return;
+  }
+  console.log(`Python version: ${stdout}`);
+});
+
 // Endpoint to retrieve route data
 app.get('/api/get-route', (req, res) => {
-  exec('python3 get_route.py', (error, stdout, stderr) => {
+  exec('py get_route.py', (error, stdout, stderr) => {
     if (error) {
       console.error(`Error executing Python script: ${error.message}`);
       return res.status(500).json({ error: 'Error executing Python script' });
@@ -44,7 +53,7 @@ app.post('/api/send-locations', (req, res) => {
   const endCoords = `${endLocation.latitude},${endLocation.longitude}`;
 
   // Execute the Python script with start and end locations as arguments
-  exec(`python3 get_route.py ${startCoords} ${endCoords}`, (error, stdout, stderr) => {
+  exec(`py get_route.py ${startCoords} ${endCoords}`, (error, stdout, stderr) => {
     if (error) {
       console.error(`Error executing Python script: ${error.message}`);
       return res.status(500).json({ error: 'Error executing Python script' });
