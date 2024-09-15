@@ -1,12 +1,43 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { View, Text, Image, TouchableOpacity, StyleSheet } from 'react-native';
-import SecureStore from 'expo-secure-store';
+import * as SecureStore from 'expo-secure-store';
+
 
 const SettingsPage = () => {
   // Example user data
 
 
   const [selectedOptions, setSelectedOptions] = useState<string[]>([]);
+
+  const [name, setName] = useState('Loading...');
+  const [gender, setGender] = useState('Loading...');
+  const [birthdate, setBirthdate] = useState('Loading...');
+
+  // Fetch values from SecureStore
+  useEffect(() => {
+    const fetchData = async () => {
+      const name = await getSecureStoreValue('name');
+      const gender = await getSecureStoreValue('gender');
+      const birthdate = await getSecureStoreValue('birthdate');
+
+      setName(name);
+      setGender(gender);
+      setBirthdate(birthdate);
+    };
+
+    fetchData();
+  }, []);
+
+
+  const getSecureStoreValue = async (key: string) => {
+    try {
+      const value = await SecureStore.getItemAsync(key);
+      return value || 'Not Available'; // Default value if none is found
+    } catch (error) {
+      console.error(`Error fetching ${key}:`, error);
+      return 'Error';
+    }
+  };
 
   const toggleSelect = (option: string) => {
     if (selectedOptions.includes(option)) {
@@ -19,6 +50,26 @@ const SettingsPage = () => {
   const isSelected = (option: string) => selectedOptions.includes(option);
 
   const options = ["Option A", "Option B", "Option C"]; // String options
+
+
+
+  async function getName(): Promise<string | null> {
+    try {
+      const value = await SecureStore.getItemAsync('name');
+      if (value) {
+        console.log('Retrieved value:', value);
+        return value;
+      } else {
+        console.log('No data found for the key:', "name");
+        return null;
+      }
+    } catch (error) {
+      console.error('Error retrieving data:', error);
+      return null;
+    }
+  }
+
+
 
   return (
     <View style={styles.container}>
@@ -53,9 +104,9 @@ const SettingsPage = () => {
       {/* User Info box */}
       <Text style={styles.userInfoTitle}>User Info</Text>
       <View style={styles.userInfoBox}>
-        {/* <Text style={styles.userInfoText}>Name: {SecureStore.getItem("name")}</Text> */}
-        {/* <Text style={styles.userInfoText}>Gender: {SecureStore.getItem("gender")}</Text> */}
-        {/* <Text style={styles.userInfoText}>Birthday: {SecureStore.getItem("birthdate")}</Text> */}
+        <Text style={styles.userInfoText}>Name: {name}</Text>
+        <Text style={styles.userInfoText}>Gender: {gender}</Text> 
+        <Text style={styles.userInfoText}>Birthday: {birthdate}</Text>
       </View>
     </View>
   );
