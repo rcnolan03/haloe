@@ -29,8 +29,8 @@ const HomeScreen: React.FC = () => {
     }
 
     // Get the current location of the user
-    const location = await Location.getCurrentPositionAsync({});
-    const { latitude, longitude } = location.coords;
+    //const location = await Location.getCurrentPositionAsync({});
+    //const { latitude, longitude } = location.coords;
     setCurrentLocation({ latitude: 41.791896, longitude: -87.603115 });
     setLoading(false);
   };
